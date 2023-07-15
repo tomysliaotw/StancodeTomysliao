@@ -1,6 +1,6 @@
 """
 File: stanCodoshop.py
-Name: 
+Name: Tom Liao
 ----------------------------------------------
 SC101_Assignment3 Adapted from Nick Parlante's
 Ghost assignment by Jerry Liao.
@@ -9,48 +9,49 @@ Ghost assignment by Jerry Liao.
 import os
 import sys
 from simpleimage import SimpleImage
+import math
 
 
-def get_pixel_dist(pixel, red, green, blue):
-    """
-    Returns a value that refers to the "color distance" between a pixel and a mean RGB value.
-
-    Input:
-        pixel (Pixel): the pixel with RGB values to be compared
-        red (int): the average red value of the pixels to be compared
-        green (int): the average green value of the pixels to be compared
-        blue (int): the average blue value of the pixels to be compared
-
-    Returns:
-        dist (float): the "color distance" of a pixel to the average RGB value of the pixels to be compared.
-    """
-    pass
+# return RGB-Color-Distance to Average color
+def get_pixel_dist(red, redA, green, greenA, blue, blueA):
+    color_distance = math.sqrt((redA-red)**2+(greenA-green)**2+(blueA-blue)**2)
+    return color_distance
 
 
-def get_average(pixels):
-    """
-    Given a list of pixels, finds their average red, blue, and green values.
+# get R,G,B values of pixel in position (x,y) of all images
+def get_all_rgb(x, y, images):
+    red = []
+    blue = []
+    green = []
+    for i in range(len(images)):
+        image = images[i].get_pixel(x,y)
+        red.append(image.red)
+        blue.append(image.blue)
+        green.append(image.green)
+    return red, green, blue
 
-    Input:
-        pixels (List[Pixel]): a list of pixels to be averaged
 
-    Returns:
-        rgb (List[int]): a list of average red, green, and blue values of the pixels
-                        (returns in order: [red, green, blue])
-    """
-    pass
+# calculate average value of a List
+def avg(a):
+    avg = 0
+    for i in a:
+        avg+=i
+    avg = avg/len(a)
+    return avg
 
 
-def get_best_pixel(pixels):
-    """
-    Given a list of pixels, returns the pixel with the smallest "color distance", which has the closest color to the average.
-
-    Input:
-        pixels (List[Pixel]): a list of pixels to be compared
-    Returns:
-        best (Pixel): the pixel which has the closest color to the average
-    """
-    pass
+# return best pixel value by taking 2 pixels with minimal distance to average value.
+def get_best_pixel(x, y, images):
+    red, green, blue = get_all_rgb(x, y, images)
+    distance = []
+    good = []
+    for i in range(len(images)):
+        distance.append(get_pixel_dist(red[i], avg(red), green[i], avg(green), blue[i], avg(blue)))
+    sm1, sm2 = sorted(distance)[0:2]  # pick smallest 2 distances
+    for i in range(len(distance)):
+        if distance[i] == sm1 or distance[i] == sm2:
+            good.append(i)            # find index of smallest 2 distances
+    return avg([red[good[0]], red[good[1]]]), avg([green[good[0]], green[good[1]]]), avg([blue[good[0]], blue[good[1]]])
 
 
 def solve(images):
@@ -68,8 +69,14 @@ def solve(images):
     
     # ----- YOUR CODE STARTS HERE ----- #
     # Write code to populate image and create the 'ghost' effect
+    for x in range(width):
+        for y in range(height):
+            r, g, b = get_best_pixel(x, y, images)
+            setter = result.get_pixel(x, y)
+            setter.red = r
+            setter.green = g
+            setter.blue = b
 
-    pass
 
     # ----- YOUR CODE ENDS HERE ----- #
 

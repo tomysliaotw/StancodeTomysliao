@@ -1,7 +1,7 @@
 # StancodeTomysliao
 ## *stancode*
-/hello this is my stancode projects
-/my demo video:
+#hello this is my stancode projects
+#my demo video: https://drive.google.com/drive/folders/1KkBoEjKAvUunhFHubSDQZBl3zzl4zNkk?usp=sharing
 ## code sorce
 # StanCodoShop:
   https://github.com/tomysliaotw/StancodeTomysliao/blob/main/stanCodoshop.py
